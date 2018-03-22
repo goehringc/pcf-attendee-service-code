@@ -3,15 +3,27 @@ resources:
 - name: attendee-service
   type: git
   source:
-    uri: https://github.com/pivotal-enablement/attendee-service
+    uri: https://github.com/goehringc/attendee-service-code
     branch: master
 
+- name: deploy-attendee-service
+  type: cf
+  source:
+    api: {{cf-api-aws}}
+    username: {{cf-user-aws}} 
+    password: {{cf-pwd-aws}}
+    organization: {{cf-org-aws}}
+    space: {{cf-org-aws}}
+    skip_cert_check: true
 jobs:
-- name: package
+- name: build 
   public: true
   plan:
   - get: attendee-service
   - task: package
-    privileged: true
     file: attendee-service/ci/tasks/package.yml
+  - put: deploy-attendee-service
+    params:
+      manifest: attendee-service/manifest.yml
+      path: package-output/attendee-service.jar
 
