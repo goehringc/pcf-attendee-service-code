@@ -28,6 +28,7 @@ jobs:
   public: true
   plan:
   - get: attendee-service
+    trigger: true
   - task: package
     file: attendee-service/ci/tasks/package.yml
   - put: cf-zero-downtime-push
