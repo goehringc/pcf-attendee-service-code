@@ -13,7 +13,7 @@ resources:
     username: {{cf-user-aws}} 
     password: {{cf-pwd-aws}}
     organization: {{cf-org-aws}}
-    space: {{cf-org-aws}}
+    space: {{cf-space-aws}}
     skip_cert_check: true
 jobs:
 - name: build 
