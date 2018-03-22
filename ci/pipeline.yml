@@ -1,4 +1,11 @@
 ---
+resource_types:
+- name: cf-cli-resource
+  type: docker-image
+  source:
+    repository: pivotalpa/cf-cli-resource
+    tag: latest
+
 resources:
 - name: attendee-service
   type: git
@@ -6,15 +13,16 @@ resources:
     uri: https://github.com/goehringc/pcf-attendee-service-code
     branch: master
 
-- name: deploy-attendee-service
-  type: cf
+- name: cf-env
+  type: cf-cli-resource
   source:
     api: {{cf-api-aws}}
     username: {{cf-user-aws}} 
     password: {{cf-pwd-aws}}
-    organization: {{cf-org-aws}}
+    org: {{cf-org-aws}}
     space: {{cf-space-aws}}
     skip_cert_check: true
+
 jobs:
 - name: build 
   public: true
@@ -22,8 +30,18 @@ jobs:
   - get: attendee-service
   - task: package
     file: attendee-service/ci/tasks/package.yml
-  - put: deploy-attendee-service
+  - put: cf-zero-downtime-push
+    resource: cf-env
     params:
+      command: zero-downtime-push
       manifest: attendee-service/manifest.yml
       path: package-output/attendee-service.jar
+      current_app_name: attendee-service
+  - put: cf-create-user-provided-service
+    resource: cf-env
+    params:
+      commands:
+      - command: create-user-provided-service
+        service_instance: attendee-service
+        credentials: '{"uri":"https://attendee-service-cg.cfapps.io/attendees"}'
 
