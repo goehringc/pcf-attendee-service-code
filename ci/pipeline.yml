@@ -3,7 +3,7 @@ resources:
 - name: attendee-service
   type: git
   source:
-    uri: https://github.com/goehringc/attendee-service-code
+    uri: https://github.com/goehringc/pcf-attendee-service-code
     branch: master
 
 - name: deploy-attendee-service
