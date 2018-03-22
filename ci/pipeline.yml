@@ -31,6 +31,13 @@ jobs:
     trigger: true
   - task: package
     file: attendee-service/ci/tasks/package.yml
+  - put: cf-create-service
+    resource: cf-env
+    params:
+      command: create-service
+      service: cleardb
+      plan: spark
+      service_instance: attendee-db
   - put: cf-zero-downtime-push
     resource: cf-env
     params:
