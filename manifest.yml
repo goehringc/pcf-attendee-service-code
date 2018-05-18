@@ -1,8 +1,6 @@
 applications:
-- name: attendee-service
+- name: attendee-service-cg
   instances: 1
-  routes:
-   - route: attendee-service-cg.cfapps.io
   memory: 1024M
   disk_quota: 1024M
   stack: cflinuxfs2
